@@ -32,21 +32,17 @@ public class HomeController {
         String token = user.getIdToken().getTokenValue();
         
         //check if first time with this token, if so record new auth event
-        List<UserEvent> userEvents = userEventRepository.findByToken(token);
-        if (userEvents.size()==0) {
+        List<UserEvent> userEventsForToken = userEventRepository.findByToken(token);
+        if (userEventsForToken.size()==0) {
             //add new event
             UserEvent newEvent = new UserEvent(user.getSubject(), user.getClaims().get("name").toString(),token,Date.from(user.getAuthenticatedAt()),Date.from(user.getIssuedAt()));
             userEventRepository.save(newEvent);
         }else {
             //edit existing event
-            UserEvent event = userEvents.get(0); //there will only ever be one because we update it if it exists already
+            UserEvent event = userEventsForToken.get(0); //there will only ever be one because we update it if it exists already
             event.setLastViewedAt(Date.from(Instant.now()));
         }
         
-        
-        return getMainModelAndView(user);
-    }
-    private ModelAndView getMainModelAndView(OidcUser user) {
         Iterable<UserEvent> userEvents = userEventRepository.findAll();
         
         List<UserEvent> eventsToShow = new ArrayList<UserEvent>();
@@ -63,9 +59,8 @@ public class HomeController {
         mav.addObject("isAdmin",isAdmin);
         mav.setViewName("home");
         return mav;
-        
     }
-
+    
     @GetMapping("/delete/{id}")
     public RedirectView deleteUser(@AuthenticationPrincipal OidcUser user,@PathVariable("id") long id, Model model) {
         UserEvent userEvent = userEventRepository.findById(id)
