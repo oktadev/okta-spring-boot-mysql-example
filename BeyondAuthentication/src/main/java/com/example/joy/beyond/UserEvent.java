@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 public class UserEvent {
@@ -112,13 +113,17 @@ public class UserEvent {
         this.tokenIssuedAt = tokenIssuedAt;
     }
 
+    @Transient
     public String getTokenIssuedAtString() {
         return formatter.format(tokenIssuedAt);
     }
     
+    @Transient
     public String getLastViewedAtString() {
         return formatter.format(lastViewedAt);
     }
+    
+    @Transient
     public String getLoginAtString() {
         return formatter.format(loginAt);
     }
