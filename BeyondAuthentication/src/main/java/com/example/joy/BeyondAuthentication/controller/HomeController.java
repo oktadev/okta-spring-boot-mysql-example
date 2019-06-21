@@ -27,6 +27,7 @@ public class HomeController {
     public HomeController(UserEventRepository userEventRepository) {
         this.userEventRepository = userEventRepository;
     }
+    
     @GetMapping("/")
     public ModelAndView home(@AuthenticationPrincipal OidcUser user) {
         String token = user.getIdToken().getTokenValue();
