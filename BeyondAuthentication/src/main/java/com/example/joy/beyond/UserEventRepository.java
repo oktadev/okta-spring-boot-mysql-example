@@ -7,4 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 public interface UserEventRepository extends  CrudRepository<UserEvent, Long> {
     List<UserEvent> findByName(String name);
     List<UserEvent> findByToken(String token);
+    List<UserEvent> findByUserId(String userId);
 }
+

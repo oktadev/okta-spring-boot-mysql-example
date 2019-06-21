@@ -42,18 +42,22 @@ public class HomeController {
             //edit existing event
             UserEvent event = userEventsForToken.get(0); //there will only ever be one because we update it if it exists already
             event.setLastViewedAt(Date.from(Instant.now()));
-            userEventRepository.save(newEvent);
+            userEventRepository.save(event);
         }
         
         Iterable<UserEvent> userEvents = userEventRepository.findAll();
         
-        List<UserEvent> eventsToShow = new ArrayList<UserEvent>();
+        List<UserEvent> eventsToShow = null;
         boolean isAdmin = user.getUserInfo().getClaimAsStringList("groups").contains("Admin");
-        for (UserEvent event : userEvents) {
-            if (isAdmin || event.getUserId().equals(user.getSubject())) {
-                eventsToShow.add(event);
-            }
+        if (isAdmin) {
+            eventsToShow = new ArrayList<UserEvent>(); 
+            
+            // Add each element of iterator to the List 
+            userEventRepository.findAll().forEach(eventsToShow::add); 
+        }else {
+            eventsToShow=userEventRepository.findByUserId(user.getSubject());   
         }
+        
         ModelAndView mav = new ModelAndView();
         mav.addObject("user", user.getUserInfo());
         mav.addObject("idToken", user.getIdToken().getTokenValue());
