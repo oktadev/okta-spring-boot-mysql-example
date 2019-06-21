@@ -24,7 +24,6 @@ public class UserEvent {
     private String name;
     
     @Lob 
-    @Column(name="token")
     private String token;
     private String userId;
     @Temporal(TemporalType.TIMESTAMP)
