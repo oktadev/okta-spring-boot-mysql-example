@@ -42,6 +42,7 @@ public class HomeController {
             //edit existing event
             UserEvent event = userEventsForToken.get(0); //there will only ever be one because we update it if it exists already
             event.setLastViewedAt(Date.from(Instant.now()));
+            userEventRepository.save(newEvent);
         }
         
         Iterable<UserEvent> userEvents = userEventRepository.findAll();
