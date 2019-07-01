@@ -1,11 +1,7 @@
-package com.example.joy.BeyondAuthentication.controller;
+package com.example.joy.controller;
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.joy.model.UserEvent;
+import com.example.joy.repository.UserEventRepository;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.ui.Model;
@@ -15,15 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.example.joy.beyond.UserEvent;
-import com.example.joy.beyond.UserEventRepository;
+import java.time.Instant;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 public class HomeController {
 
     private final UserEventRepository userEventRepository;
 
-    @Autowired
     public HomeController(UserEventRepository userEventRepository) {
         this.userEventRepository = userEventRepository;
     }
@@ -34,28 +30,23 @@ public class HomeController {
         
         //check if first time with this token, if so record new auth event
         List<UserEvent> userEventsForToken = userEventRepository.findByToken(token);
-        if (userEventsForToken.size()==0) {
+        if (userEventsForToken.size() == 0) {
             //add new event
             UserEvent newEvent = new UserEvent(user.getSubject(), user.getClaims().get("name").toString(),token,Date.from(user.getAuthenticatedAt()),Date.from(user.getIssuedAt()));
             userEventRepository.save(newEvent);
-        }else {
+        } else {
             //edit existing event
             UserEvent event = userEventsForToken.get(0); //there will only ever be one because we update it if it exists already
             event.setLastViewedAt(Date.from(Instant.now()));
             userEventRepository.save(event);
         }
         
-        Iterable<UserEvent> userEvents = userEventRepository.findAll();
-        
-        List<UserEvent> eventsToShow = null;
+        List<UserEvent> eventsToShow;
         boolean isAdmin = user.getUserInfo().getClaimAsStringList("groups").contains("Admin");
         if (isAdmin) {
-            eventsToShow = new ArrayList<UserEvent>(); 
-            
-            // Add each element of iterator to the List 
-            userEventRepository.findAll().forEach(eventsToShow::add); 
-        }else {
-            eventsToShow=userEventRepository.findByUserId(user.getSubject());   
+            eventsToShow = userEventRepository.findAll();
+        } else {
+            eventsToShow = userEventRepository.findByUserId(user.getSubject());
         }
         
         ModelAndView mav = new ModelAndView();

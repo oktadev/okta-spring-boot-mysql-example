@@ -1,17 +1,14 @@
-package com.example.joy.beyond;
+package com.example.joy;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
-@SpringBootApplication(scanBasePackages = { "com.example.joy" })
+@SpringBootApplication
 public class BeyondAuthenticationApplication{
-    @Autowired
 
     public static void main(String[] args) {
         SpringApplication.run(BeyondAuthenticationApplication.class, args);
     }
-    
-    
 }

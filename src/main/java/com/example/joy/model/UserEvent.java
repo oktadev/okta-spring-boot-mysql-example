@@ -1,7 +1,4 @@
-package com.example.joy.beyond;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
+package com.example.joy.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +8,8 @@ import javax.persistence.Lob;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Entity
 public class UserEvent {
@@ -20,21 +19,24 @@ public class UserEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private String name;
     
     @Lob 
     private String token;
+
     private String userId;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date loginAt;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date tokenIssuedAt;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastViewedAt;
     
-    
-    public UserEvent() {
-    }
+    public UserEvent() {}
 
     public UserEvent(String userId, String name,String token,Date loginAt,Date issueAt) {
         this.userId=userId;
@@ -48,11 +50,11 @@ public class UserEvent {
     @Override
     public String toString() {
         return "UserEvent{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", token='" + token + '\'' +
-                ", loginAt='" + loginAt + '\'' +
-                '}';
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", token='" + token + '\'' +
+            ", loginAt='" + loginAt + '\'' +
+            '}';
     }
 
     public Long getId() {
