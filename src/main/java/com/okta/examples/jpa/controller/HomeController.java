@@ -30,16 +30,19 @@ public class HomeController {
         
         //check if first time with this token, if so record new auth event
         List<UserEvent> userEventsForToken = userEventRepository.findByToken(token);
+        UserEvent event;
         if (userEventsForToken.size() == 0) {
             //add new event
-            UserEvent newEvent = new UserEvent(user.getSubject(), user.getClaims().get("name").toString(),token,Date.from(user.getAuthenticatedAt()),Date.from(user.getIssuedAt()));
-            userEventRepository.save(newEvent);
+            event = new UserEvent(
+                user.getSubject(), user.getClaims().get("name").toString(),
+                token, Date.from(user.getAuthenticatedAt()), Date.from(user.getIssuedAt())
+            );
         } else {
             //edit existing event
-            UserEvent event = userEventsForToken.get(0); //there will only ever be one because we update it if it exists already
+            event = userEventsForToken.get(0); //there will only ever be one because we update it if it exists already
             event.setLastViewedAt(Date.from(Instant.now()));
-            userEventRepository.save(event);
         }
+        userEventRepository.save(event);
         
         List<UserEvent> eventsToShow;
         boolean isAdmin = user.getUserInfo().getClaimAsStringList("groups").contains("Admin");
