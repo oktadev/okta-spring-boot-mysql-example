@@ -7,6 +7,38 @@ using [OpenId Connect](https://developer.okta.com/docs/reference/api/oidc/).
 
 It uses [JPA](https://spring.io/projects/spring-data-jpa) to add user activity information to a [MySQL](https://www.oracle.com/mysql/) database.
 
+## Build
+
+In order to use this example, you'll need to create an Okta Org [here](https://developer.okta.com/signup)
+
+You'll also need to create an `application.properties` file in `src/main/resources`:
+
+```
+okta.oauth2.issuer={authServerUrl}
+okta.oauth2.clientId={clientId}
+okta.oauth2.clientSecret={clientSecret}
+okta.oauth2.scope=openid
+
+## MySQL
+spring.datasource.url=jdbc:mysql://{mysql url}:{mysql port}/{dbName}
+
+spring.datasource.username={dbUser}
+spring.datasource.password={dbPassword}
+
+# drop in to create the table, good for testing, comment this in production. This will create the table for you on each load of application, so you may want to comment this out after the first load
+spring.jpa.hibernate.ddl-auto=create
+```
+
+## Run
+
+Once you've created an Okta org, configured it according to the [blog post](https://developer.okta.com/blog/2019/07/03/spring-boot-jpa) and set your `application.properties` file, you can run the application like so:
+
+```
+mvn spring-boot:run
+```
+
+## Additional Resources
+
 To learn more about the Okta OIDC and Single Sign-On (SSO), check out these links:
 
 * [Easy Single Sign-On with Spring Boot and OAuth 2.0](/blog/2019/05/02/spring-boot-single-sign-on-oauth-2)
