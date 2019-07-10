@@ -17,7 +17,6 @@ You'll also need to create an `application.properties` file in `src/main/resourc
 okta.oauth2.issuer={authServerUrl}
 okta.oauth2.clientId={clientId}
 okta.oauth2.clientSecret={clientSecret}
-okta.oauth2.scope=openid
 
 ## MySQL
 spring.datasource.url=jdbc:mysql://{mysql url}:{mysql port}/{dbName}
